@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1d1908b1-df91-40bc-95de-330be2539fbe" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="9c7c6ff6-c206-46ac-bc94-10a1d7bc627e" >
+		<email:smtp-connection host="smtp.gmail.com" port="587" user="raghu581b@gmail.com" password="@Bairu123" />
+	</email:smtp-config>
+	<email:smtp-config name="Email_SMTP1" doc:name="Email SMTP" doc:id="7d4c9f08-4337-4ffa-a187-7f643692cc14" >
+		<email:smtp-connection host="smtp.gmail.com" port="587" user="raghu581b@gmail.com" password="@Bairu123">
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<flow name="gmailFlow" doc:id="06e09f35-fd34-48af-90f8-8677b50b14bf" >
+		<http:listener doc:name="Listener" doc:id="d30f8213-3883-400e-a58c-63aec0edbf37" config-ref="HTTP_Listener_config" path="smtp"/>
+		<logger level="INFO" doc:name="Logger" doc:id="aebdf5ba-1700-4892-9fd7-302833a24417" message="welcome to smtp"/>
+		<email:send doc:name="Send" doc:id="670ddd7d-824f-4218-8711-5e4b6160f956" config-ref="Email_SMTP1">
+			<email:to-addresses >
+				<email:to-address value="raghu581bb@gmail.com" />
+			</email:to-addresses>
+			<email:cc-addresses >
+				<email:cc-address value="raghu581bb@gmail.com" />
+			</email:cc-addresses>
+			<email:body >
+				<email:content ><![CDATA[welcome to smtp]]></email:content>
+			</email:body>
+		</email:send>
+		<logger level="INFO" doc:name="Logger" doc:id="a5add494-d94d-45fb-a4e3-b05352d0edb1" message="#[payload]"/>
+	</flow>
+</mule>
